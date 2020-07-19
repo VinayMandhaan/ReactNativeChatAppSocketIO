@@ -15,6 +15,7 @@ export default function JoinScreen({navigation}){
                 onChangeText={text => setUsername(text)}
             />
             <Button title="Join Chat" onPress={
+                // Dispatch Server Join action to the socket
                 ()=>{dispatch({type:"server/join", data:username}),
                 navigation.navigate("Friend")
             }

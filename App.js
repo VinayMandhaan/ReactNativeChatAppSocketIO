@@ -25,13 +25,18 @@ import { act } from 'react-test-renderer';
 const socket = io("http://192.168.1.108:5000")
 const socketIoMidlleware = createSocketIoMiddleware(socket,"server/")
 
+
+// Used Redux, Reducer for state.
 function reducer(state = { conversations: {} }, action) {
   switch(action.type){
+    // User Online Reducer
     case 'users_online':
       const conversations = { ...state.conversations };
+      // Get All the Users from Socket Io
       const usersOnline = action.data;
       for (let i = 0; i < usersOnline.length; i++) {
         const userId = usersOnline[i].userId;
+        // Check If User Exist, If User Does Not Exist, Create an Conversation Object of a particular User with Messages array and Username
         if (conversations[userId] === undefined) {
           conversations[userId] = {
             messages: [],
@@ -40,8 +45,10 @@ function reducer(state = { conversations: {} }, action) {
         }
       }
       return { ...state, usersOnline, conversations };
+    // Get Data of Joined User (Self User)
     case 'self_user':
       return{...state,selfUser:action.data}
+    // Append Messages in the Messages array and ConversationId in the ConversationId Array
     case "private_message":
       const conversationId = action.data.conversationId
       return {
